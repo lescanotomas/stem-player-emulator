@@ -1,12 +1,13 @@
 // ==UserScript==
 // @name         Stem Player Emulator
 // @namespace    https://www.stemplayer.com/
-// @version      0.4.2
+// @version      0.6.1
 // @description  Emulator for Kanye West's stem player
 // @author       krystalgamer
 // @match        https://www.stemplayer.com/*
 // @match        https://www.kanyewest.com/*
 // @icon         https://www.google.com/s2/favicons?sz=64&domain=stemplayer.com
+// @run-at       document-start
 // @grant        none
 // ==/UserScript==
 
@@ -554,7 +555,15 @@ console.log('out maquina');
     function createFakeUSB(){
             return createProxy(new FakeUSB());
     }
+
+    if(navigator.usb == undefined){
+        navigator.usb = { addEventListener: () => {}};
+
+    }
+    navigator.usb.getDevices = () => new Promise((res, _) => { res([]); } );
     const origRequestDevice = navigator.usb.requestDevice;
+
+
 
     navigator.usb.requestDevice = (ignore) => {
         console.log('aqui');
@@ -598,8 +607,27 @@ console.log('out maquina');
         mode = mode == 'mp3' ? 'wav' : 'mp3';
         e.srcElement.innerHTML = modeStr();
     });
-    document.body.prepend(but)
+    
 
 
-    document.addEventListner('load', () => { console.log('cona'); }, false);
+    if(!!window.InstallTrigger){
+        window.InstallTrigger = undefined;
+    }
+
+    if(!!window['safari']){
+        window['safari'] = {};
+    }
+
+
+    if(window.chrome == undefined){
+        window.chrome = {loadTimes:{}};
+    }
+
+    if (document.readyState == "complete" || document.readyState == "loaded" || document.readyState == "interactive") {
+        document.body.prepend(but)
+    } else {
+        document.addEventListener("DOMContentLoaded", function(event) {
+            document.body.prepend(but)
+        });
+    }
 })();
