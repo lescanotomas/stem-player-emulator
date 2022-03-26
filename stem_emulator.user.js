@@ -318,7 +318,7 @@ console.log('out maquina');
 
         getDeviceInfo(){
          return {
-                        'appver': "1.0.1636",
+                        'appver': "1.0.1747",
                         'btver': "1.24.1405",
                         'blver': "0.1.1311",
                         'sn': '002800273330510139323636'
